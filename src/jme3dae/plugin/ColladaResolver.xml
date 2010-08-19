@@ -9,7 +9,8 @@ and open the template in the editor.
         <ext name="dae"/>
         <resolver mime="text/collada+xml">
             <xml-rule>
-                <element ns="COLLADA"/>
+                <!--element ns="COLLADA"/-->
+                <element name="COLLADA"/>
             </xml-rule>
         </resolver>
     </file>
