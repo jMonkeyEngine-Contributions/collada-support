@@ -6,6 +6,7 @@ package jme3dae.plugin.importer;
 
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.export.binary.BinaryExporter;
+import com.jme3.gde.core.assets.AssetProperties;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.awt.event.ActionListener;
@@ -19,6 +20,7 @@ import org.openide.NotifyDescriptor.Confirmation;
 import org.openide.awt.StatusDisplayer;
 import org.openide.filesystems.FileLock;
 import org.openide.filesystems.FileObject;
+import org.openide.filesystems.FileUtil;
 import org.openide.loaders.DataObject;
 import org.openide.util.Exceptions;
 
@@ -57,7 +59,15 @@ public final class ColladaToJme implements ActionListener {
                         //load model
                         Spatial model = mgr.loadModel(manager.getRelativeAssetPath(file.getPath()));
                         BinaryExporter exp = BinaryExporter.getInstance();
-                        exp.save(model, new File(outputPath));
+                        File outFile=new File(outputPath);
+                        exp.save(model, outFile);
+                        DataObject targetModel=DataObject.find(FileUtil.toFileObject(outFile));
+                        AssetProperties properties=targetModel.getLookup().lookup(AssetProperties.class);
+                        if(properties!=null){
+                            properties.loadProperties();
+                            properties.setProperty("ORIGINAL_PATH", manager.getRelativeAssetPath(file.getPath()));
+                            properties.saveProperties();
+                        }
                         StatusDisplayer.getDefault().setStatusText("Created file " + file.getName() + ".j3o");
                         //try make NetBeans update the tree.. :/
                         context.getPrimaryFile().getParent().refresh();
