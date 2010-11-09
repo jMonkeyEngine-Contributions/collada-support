@@ -6,7 +6,7 @@ package jme3dae.plugin.importer;
 
 import com.jme3.asset.DesktopAssetManager;
 import com.jme3.export.binary.BinaryExporter;
-import com.jme3.gde.core.assets.AssetProperties;
+import com.jme3.gde.core.assets.AssetData;
 import com.jme3.gde.core.assets.ProjectAssetManager;
 import com.jme3.scene.Spatial;
 import java.awt.event.ActionListener;
@@ -62,7 +62,7 @@ public final class ColladaToJme implements ActionListener {
                         File outFile=new File(outputPath);
                         exp.save(model, outFile);
                         DataObject targetModel=DataObject.find(FileUtil.toFileObject(outFile));
-                        AssetProperties properties=targetModel.getLookup().lookup(AssetProperties.class);
+                        AssetData properties=targetModel.getLookup().lookup(AssetData.class);
                         if(properties!=null){
                             properties.loadProperties();
                             properties.setProperty("ORIGINAL_PATH", manager.getRelativeAssetPath(file.getPath()));
